@@ -25,6 +25,9 @@ class CreateUser(graphene.Mutation):
     user = graphene.Field(User)
 
     def mutate(self,info,username):
+        if info.context.get('vip'):
+            username = username.upper()
+
         user = User(username=username)
         return CreateUser(user=user)
 
@@ -43,15 +46,15 @@ my_query = """
 """
 
 mutation_query = """
-mutation createUser {
-    createUser(username : "Nikhil"){
+mutation createUser($username: String) {
+    createUser(username : $username){
         user {
             username
         }
     }
 }
 """
-result = schema.execute(mutation_query)
+result = schema.execute(mutation_query, variable_values={'username':'Nikhil'},context={'vip':False})
 data = dict(result.data.items())
 
 print(json.dumps(data, indent=3))
