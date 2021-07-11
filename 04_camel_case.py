@@ -34,7 +34,7 @@ print("==============================")
 query_graphql = """
 query myquery {
     array {
-        f_name
+        fName
     }
 }
 """
